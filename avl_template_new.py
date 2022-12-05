@@ -8,6 +8,12 @@
 
 """A class represnting a node in an AVL tree"""
 
+
+
+
+
+test = 1
+
 class AVLNode(object):
 	"""Constructor, you are allowed to add more fields. 
 
