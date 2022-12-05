@@ -9,6 +9,8 @@
 """A class represnting a node in an AVL tree"""
 
 test = 'test'
+test = 'test'
+
 class AVLNode(object):
 	"""Constructor, you are allowed to add more fields. 
 
