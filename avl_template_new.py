@@ -206,6 +206,7 @@ class AVLTreeList(object):
 	"""
 	def insert(self, i, val):
 		new_node = AVLNode(val)
+		low_node = new_node
 		new_node.setRight(self.VIRTUALNODE)
 		new_node.setLeft(self.VIRTUALNODE)
 		if self.size == 0 and i==0:
@@ -225,10 +226,10 @@ class AVLTreeList(object):
 			self.size += 1
 		else:
 			node = self.retrieve(i)
-			if not (node.getRight().isRealNode()):
+			if not (node.getLeft().isRealNode()):
 				# node.setRight(new_node)
 				# new_node.setParent(node)
-				node.setRight(new_node)
+				node.setLeft(new_node)
 				new_node.setParent(node)
 			else:
 				# sucessor = self.getSucessor(node)
@@ -241,14 +242,16 @@ class AVLTreeList(object):
 					self.root = new_node
 					new_node.setRight(tmp)
 					tmp.setParent(new_node)
+					low_node = tmp
 					self.size += 1
 				else:
 					predecessor_curr_right = predecessor.getRight()
 					predecessor.setRight(new_node)
 					new_node.setParent(predecessor_curr_right)
-		rotations_cnt = self.rebalance(new_node)
-		self.updateHeight(new_node)
-		self.updateSize(new_node)
+
+		rotations_cnt = self.rebalance(low_node)
+		self.updateHeight(low_node)
+		self.updateSize(low_node)
 		return rotations_cnt
 
 
@@ -279,7 +282,7 @@ class AVLTreeList(object):
 			pred.setParent(node.getParent())
 			rotations_cnt = self.rebalance(pred_parent)
 
-			pred_left_child.updateSize()
+			self.updateSize(pred_left_child)
 
 		else:
 			direction = node.childDirection()
@@ -296,9 +299,17 @@ class AVLTreeList(object):
 				parent.setLeft(node_child)
 			else:
 				parent.setRight(node_child)
-			node_child.setParent(parent)
-			self.updateSize(node_child)
-			rotations_cnt = self.rebalance(node_child)
+			parent.setSize(parent.getSize()-1)
+			if node_child.isRealNode():
+				node_child.setParent(parent)
+				rotations_cnt = self.rebalance(node_child)
+				self.updateSize(node_child)
+
+
+			else:
+				rotations_cnt = self.rebalance(parent)
+				self.updateSize(parent)
+
 		return rotations_cnt
 
 
@@ -459,7 +470,7 @@ class AVLTreeList(object):
 		curr = None
 		if node.getLeft().isRealNode():
 			curr = node.getLeft()
-			while curr.getRight().isRealNode:
+			while curr.getRight().isRealNode():
 				curr = curr.getRight()
 			predecessor = curr
 		else:
@@ -504,6 +515,8 @@ class AVLTreeList(object):
 	"""
 	def updateHeight(self, lowest_node):
 		curr = lowest_node
+		if curr == self.VIRTUALNODE:
+			curr = curr.getParent()
 		while curr != None:
 			curr.setHeight(max(curr.getLeft().getHeight(),curr.getRight().getHeight()) + 1)
 			curr = curr.getParent()
@@ -515,6 +528,8 @@ class AVLTreeList(object):
 	"""
 	def updateSize(self, lowest_node):
 		curr = lowest_node
+		if curr == self.VIRTUALNODE:
+			curr = curr.getParent()
 		while curr != None:
 			curr.size = 1 + curr.getLeft().getSize() + curr.getRight().getSize()
 			curr = curr.getParent()
@@ -540,6 +555,8 @@ class AVLTreeList(object):
 		self.updateHeight(lowest_node)
 		cnt = 0
 		curr = lowest_node
+		if curr == self.VIRTUALNODE:
+			curr = curr.getParent()
 		while curr!=None:
 			bfs = self.getBfs(curr)
 			if -1<=bfs<=1:
@@ -558,6 +575,8 @@ class AVLTreeList(object):
 					right_child_left_child = right_child.getLeft()
 					self.rightRotation(right_child_left_child,right_child)
 					self.leftRotation(right_child_left_child, curr)
+					self.updateSize(right_child)
+
 					cnt += 2
 
 			if bfs >= 2:
@@ -567,10 +586,15 @@ class AVLTreeList(object):
 					left_child_right_child = left_child.getRight()
 					self.leftRotation(left_child_right_child, left_child)
 					self.rightRotation(left_child_right_child, curr)
+					self.updateSize(left_child)
+
 					cnt += 2
 				elif 0<=left_child_bfs <= 1:
 					self.rightRotation(left_child, curr)
 					cnt +=1
+			self.updateHeight(curr)
+			self.updateSize(curr)
+
 			curr = curr.getParent()
 		return cnt
 
@@ -597,11 +621,14 @@ class AVLTreeList(object):
 def test():
 	avl = AVLTreeList()
 	avl.insert(0,'0')
-	avl.insert(0,'1')
-	avl.insert(0,'2')
+	avl.insert(1,'1')
+	avl.insert(2,'2')
+	n = avl.retrieve(2)
 	avl.insert(2,'3')
 	# avl.insert(0,'3')
 	# avl.insert(1,'5')
+	# avl.inorderPrint()
+
 	avl.delete(0)
 
 
