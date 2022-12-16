@@ -264,6 +264,9 @@ class AVLTreeList(object):
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	"""
 	def delete(self, i):
+		if i >= self.length():
+			return
+		self.len -=1
 		node = self.retrieve(i)
 		parent = node.getParent()
 		left = node.getLeft()
@@ -290,16 +293,26 @@ class AVLTreeList(object):
 			node_child = self.VIRTUALNODE              #the deafult is virtual, will change if the node has one son and wouldn't if not
 
 			if left.isRealNode():
+				left.setParent(parent)
 				node_child = left
 			elif right.isRealNode():
+				right.setParent(parent)
 				node_child = right
 
+			if direction!='ROOT':
+				if node_is_left_child:
+					parent.setLeft(node_child)
+				else:
+					parent.setRight(node_child)
+				parent.setSize(parent.getSize()-1)
+				self.updateSize(node_child)
 
-			if node_is_left_child:
-				parent.setLeft(node_child)
-			else:
-				parent.setRight(node_child)
-			parent.setSize(parent.getSize()-1)
+			elif node_child.isRealNode():
+				self.root = node_child
+				self.updateSize(node_child)
+
+
+
 			if node_child.isRealNode():
 				node_child.setParent(parent)
 				rotations_cnt = self.rebalance(node_child)
@@ -531,7 +544,7 @@ class AVLTreeList(object):
 		if curr == self.VIRTUALNODE:
 			curr = curr.getParent()
 		while curr != None:
-			curr.len = 1 + curr.getLeft().getSize() + curr.getRight().getSize()
+			curr.size = 1 + curr.getLeft().getSize() + curr.getRight().getSize()
 			curr = curr.getParent()
 
 	""" 
@@ -692,13 +705,20 @@ class AVLTreeList(object):
 		return i
 
 
-# def test():
-# 	avl = AVLTreeList()
-# 	avl.insert(0,'0')
-# 	avl.insert(1,'1')
-# 	avl.insert(0,'2')
-# 	avl.insert(1,'3')
-# 	avl.insert(0,'4')
+def test():
+	avl = AVLTreeList()
+	avl.insert(0,'0')
+	avl.insert(1, '1')
+
+	avl.delete(0)
+	avl.inorderPrint()
+
+	# avl.insert(1,'2')
+
+	#
+	# avl.insert(0,'2')
+	# avl.insert(1,'3')
+	# avl.insert(0,'4')
 #
 # 	node = avl.retrieve(3).getValue()
 # 	print(node)
@@ -715,7 +735,7 @@ class AVLTreeList(object):
 
 	# avl.inorderPrint()
 
-# test()
+test()
 
 
 
