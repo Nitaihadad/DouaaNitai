@@ -247,7 +247,7 @@ class AVLTreeList(object):
 				else:
 					predecessor_curr_right = predecessor.getRight()
 					predecessor.setRight(new_node)
-					new_node.setParent(predecessor_curr_right)
+					new_node.setParent(predecessor)
 
 		rotations_cnt = self.rebalance(low_node)
 		self.updateHeight(low_node)
@@ -622,19 +622,27 @@ def test():
 	avl = AVLTreeList()
 	avl.insert(0,'0')
 	avl.insert(1,'1')
-	avl.insert(2,'2')
-	n = avl.retrieve(2)
-	avl.insert(2,'3')
-	# avl.insert(0,'3')
+	avl.insert(0,'2')
+	avl.insert(1,'3')
+	avl.insert(0,'4')
+
+	node = avl.retrieve(3).getValue()
+	print(node)
+	#
+	# avl.insert(1,'1')
+	# avl.insert(2,'2')
+	# n = avl.retrieve(2)
+	# avl.insert(2,'3')
+	# avl.insert(0,'4')
 	# avl.insert(1,'5')
+	avl.inorderPrint()
+	# avl.delete(0)
+
+
 	# avl.inorderPrint()
 
-	avl.delete(0)
-
-
-	avl.inorderPrint()
-
 test()
+
 
 
 
