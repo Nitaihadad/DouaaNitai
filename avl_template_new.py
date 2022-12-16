@@ -1,5 +1,5 @@
-#username - complete info
-#id1      - complete info 
+#username - douaasatel
+#id1      - 206360521
 #name1    - complete info 
 #id2      - complete info
 #name2    - complete info  
@@ -137,8 +137,36 @@ class AVLNode(object):
 A class implementing the ADT list, using an AVL tree.
 """
 
-class AVLTreeList(object):
 
+def mergeSort(arr):  ##helper function for sort
+	if len(arr) > 1:
+		mid = len(arr) // 2
+		L = arr[:mid]
+		R = arr[mid:]
+		mergeSort(L)
+		mergeSort(R)
+		i = j = k = 0
+		# Copy data to temp arrays L[] and R[]
+		while i < len(L) and j < len(R):
+			if L[i] <= R[j]:
+				arr[k] = L[i]
+				i += 1
+			else:
+				arr[k] = R[j]
+				j += 1
+			k += 1
+		while i < len(L):
+			arr[k] = L[i]
+			i += 1
+			k += 1
+		while j < len(R):
+			arr[k] = R[j]
+			j += 1
+			k += 1
+	pass
+
+class AVLTreeList(object):
+	import numpy as np
 
 	"""
 	Constructor, you are allowed to add more fields.
@@ -312,17 +340,19 @@ class AVLTreeList(object):
 
 		return rotations_cnt
 
-
-
-
-
 	"""returns the value of the first item in the list
 
 	@rtype: str
 	@returns: the value of the first item, None if the list is empty
 	"""
 	def first(self):
-		return None
+		if self.len == 0:
+			return None
+		else:
+			node = self.retrieve(0)
+			return node
+
+
 
 	"""returns the value of the last item in the list
 
@@ -330,23 +360,31 @@ class AVLTreeList(object):
 	@returns: the value of the last item, None if the list is empty
 	"""
 	def last(self):
-		return None
-
+		if self.len == 0:
+			return None
+		else:
+			idx= self.len - 1
+			node = self.retrieve(idx)
+			return node
 	"""returns an array representing list 
 
 	@rtype: list
 	@returns: a list of strings representing the data structure
 	"""
-	def listToArray(self):
-		return None
+	def listToArray(self): ##time complexity: O(n)
+		if self.empty():
+			return None
+		else:
+			listArr= np.array ([self.retrieve(i) for i in range(self.len)]) #create a numpy array and use retrieve to hold the values the list elements
+			return listArr
 
 	"""returns the size of the list 
 
 	@rtype: int
 	@returns: the size of the list
 	"""
-	def length(self):
-		return self.len
+	def length(self): #time complexity O(1) ***check this***
+		return self.empty()
 
 	"""sort the info values of the list
 
@@ -354,7 +392,14 @@ class AVLTreeList(object):
 	@returns: an AVLTreeList where the values are sorted by the info of the original list.
 	"""
 	def sort(self):
-		return None
+		if self.empty():
+			return self
+		T1= AVLTreeList() ## make a copy of the self tree
+		arr = self.listToArray() ##store sorter list of elements
+		mergeSort(arr)
+		for i in range (len(arr)):
+			T1.insert(T1, i, arr[i])
+		return T1
 
 	"""permute the info values of the list 
 
@@ -616,6 +661,11 @@ class AVLTreeList(object):
 				inorderPrintRec(node.getRight())
 		inorderPrintRec(self.root)
 		print("tree size " + str(self.len))
+
+
+
+
+
 
 
 # """ from here, all functions are for testing - REMOVE"""
