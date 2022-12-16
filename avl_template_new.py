@@ -145,7 +145,7 @@ class AVLTreeList(object):
 
 	"""
 	def __init__(self):
-		self.size = 0
+		self.len = 0
 		self.root = None
 		self.VIRTUALNODE = AVLNode("VIRTUAL")
 		self.VIRTUALNODE.setSize(0)
@@ -158,7 +158,7 @@ class AVLTreeList(object):
 	@returns: True if the list is empty, False otherwise
 	"""
 	def empty(self):
-		return self.size == 0
+		return self.len == 0
 
 
 	"""retrieves the value of the i'th item in the list
@@ -184,7 +184,7 @@ class AVLTreeList(object):
 					ind = i-node.getLeft().getSize()-1
 					return retrieve_rec(node.getRight(),ind)
 
-		if i > self.size:
+		if i > self.len:
 			return None
 		else:
 			return retrieve_rec(self.root,i)
@@ -209,21 +209,21 @@ class AVLTreeList(object):
 		low_node = new_node
 		new_node.setRight(self.VIRTUALNODE)
 		new_node.setLeft(self.VIRTUALNODE)
-		if self.size == 0 and i==0:
+		if self.len == 0 and i==0:
 			self.root = new_node
-			self.size=1
+			self.len=1
 		elif i == 0:
 			tmp = self.root
 			self.root = new_node
 			new_node.setRight(tmp)
 			tmp.setParent(new_node)
-			self.size += 1
+			self.len += 1
 
-		elif self.size == i:
+		elif self.len == i:
 			parent = self.getMaxNode()
 			parent.setRight(new_node)
 			new_node.setParent(parent)
-			self.size += 1
+			self.len += 1
 		else:
 			node = self.retrieve(i)
 			if not (node.getLeft().isRealNode()):
@@ -243,7 +243,7 @@ class AVLTreeList(object):
 					new_node.setRight(tmp)
 					tmp.setParent(new_node)
 					low_node = tmp
-					self.size += 1
+					self.len += 1
 				else:
 					predecessor_curr_right = predecessor.getRight()
 					predecessor.setRight(new_node)
@@ -346,7 +346,7 @@ class AVLTreeList(object):
 	@returns: the size of the list
 	"""
 	def length(self):
-		return None
+		return self.len
 
 	"""sort the info values of the list
 
@@ -392,7 +392,7 @@ class AVLTreeList(object):
 	@returns: the root, None if the list is empty
 	"""
 	def getRoot(self):
-		return None
+		return self.root
 
 
 	"""
@@ -531,7 +531,7 @@ class AVLTreeList(object):
 		if curr == self.VIRTUALNODE:
 			curr = curr.getParent()
 		while curr != None:
-			curr.size = 1 + curr.getLeft().getSize() + curr.getRight().getSize()
+			curr.len = 1 + curr.getLeft().getSize() + curr.getRight().getSize()
 			curr = curr.getParent()
 
 	""" 
@@ -615,33 +615,107 @@ class AVLTreeList(object):
 				print('val: ' + node.getValue() + ' height: ' + str(node.getHeight()) + ' size: ' + str(node.getSize()) + ' left: ' + node.getLeft().getValue() + ' right: ' + node.getRight().getValue())
 				inorderPrintRec(node.getRight())
 		inorderPrintRec(self.root)
-		print("tree size " + str(self.size))
+		print("tree size " + str(self.len))
 
 
-def test():
-	avl = AVLTreeList()
-	avl.insert(0,'0')
-	avl.insert(1,'1')
-	avl.insert(0,'2')
-	avl.insert(1,'3')
-	avl.insert(0,'4')
+# """ from here, all functions are for testing - REMOVE"""
 
-	node = avl.retrieve(3).getValue()
-	print(node)
-	#
-	# avl.insert(1,'1')
-	# avl.insert(2,'2')
-	# n = avl.retrieve(2)
-	# avl.insert(2,'3')
-	# avl.insert(0,'4')
-	# avl.insert(1,'5')
-	avl.inorderPrint()
-	avl.delete(0)
+	def getTreeHeight(self):
+		return self.root.getHeight()
+	def append(self, val):
+		self.insert(self.length(), val)
+
+	def printt(self):
+		out = ""
+		for row in self.printree(self.root):  # need printree.py file
+			out = out + row + "\n"
+		print(out)
+
+	def printree(self, t, bykey=True):
+		# for row in trepr(t, bykey):
+		#        print(row)
+		return self.trepr(t, False)
+
+	def trepr(self, t, bykey=False):
+		if t == None:
+			return ["#"]
+
+		thistr = str(t.key) if bykey else str(t.getValue())
+
+		return self.conc(self.trepr(t.left, bykey), thistr, self.trepr(t.right, bykey))
+
+	def conc(self, left, root, right):
+
+		lwid = len(left[-1])
+		rwid = len(right[-1])
+		rootwid = len(root)
+
+		result = [(lwid + 1) * " " + root + (rwid + 1) * " "]
+
+		ls = self.leftspace(left[0])
+		rs = self.rightspace(right[0])
+		result.append(ls * " " + (lwid - ls) * "_" + "/" + rootwid *
+					  " " + "\\" + rs * "_" + (rwid - rs) * " ")
+
+		for i in range(max(len(left), len(right))):
+			row = ""
+			if i < len(left):
+				row += left[i]
+			else:
+				row += lwid * " "
+
+			row += (rootwid + 2) * " "
+
+			if i < len(right):
+				row += right[i]
+			else:
+				row += rwid * " "
+
+			result.append(row)
+
+		return result
+
+	def leftspace(self, row):
+		# row is the first row of a left node
+		# returns the index of where the second whitespace starts
+		i = len(row) - 1
+		while row[i] == " ":
+			i -= 1
+		return i + 1
+
+	def rightspace(self, row):
+		# row is the first row of a right node
+		# returns the index of where the first whitespace ends
+		i = 0
+		while row[i] == " ":
+			i += 1
+		return i
+
+
+# def test():
+# 	avl = AVLTreeList()
+# 	avl.insert(0,'0')
+# 	avl.insert(1,'1')
+# 	avl.insert(0,'2')
+# 	avl.insert(1,'3')
+# 	avl.insert(0,'4')
+#
+# 	node = avl.retrieve(3).getValue()
+# 	print(node)
+# 	#
+# 	# avl.insert(1,'1')
+# 	# avl.insert(2,'2')
+# 	# n = avl.retrieve(2)
+# 	# avl.insert(2,'3')
+# 	# avl.insert(0,'4')
+# 	# avl.insert(1,'5')
+# 	avl.inorderPrint()
+# 	avl.delete(0)
 
 
 	# avl.inorderPrint()
 
-test()
+# test()
 
 
 
