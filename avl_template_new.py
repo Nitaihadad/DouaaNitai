@@ -636,7 +636,7 @@ def test():
 	# avl.insert(0,'4')
 	# avl.insert(1,'5')
 	avl.inorderPrint()
-	# avl.delete(0)
+	avl.delete(0)
 
 
 	# avl.inorderPrint()
