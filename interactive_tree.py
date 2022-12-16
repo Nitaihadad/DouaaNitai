@@ -117,7 +117,7 @@ def interactive_tree():
             print("your list as an array: ")
             print(T.listToArray())
         elif choice == "length()":
-            print("the length of your list is: " + str(T.len()))
+            print("the length of your list is: " + str(T.length()))
         elif choice[:5] == "split":
             index = int(choice[6:-1])
             res = T.split(index)
@@ -166,7 +166,7 @@ def interactive_tree():
                 enter your sequence here: \n").split(",")
             L = AVLTreeList()
             for val in lst:
-                L.insert(L.len(), val)
+                L.insert(L.length(), val)
             print("the avlTreeList that had been concatenated to your list is: ")
             L.printt()
             print(L.listToArray())
