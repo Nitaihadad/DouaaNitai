@@ -3,8 +3,9 @@
 #name1    - complete info 
 #id2      - complete info
 #name2    - complete info  
-
-
+import numpy as np
+from random import randrange
+import math
 
 """A class represnting a node in an AVL tree"""
 
@@ -133,11 +134,6 @@ class AVLNode(object):
 
 
 
-"""
-A class implementing the ADT list, using an AVL tree.
-"""
-
-
 def mergeSort(arr):  ##helper function for sort
 	if len(arr) > 1:
 		mid = len(arr) // 2
@@ -165,8 +161,19 @@ def mergeSort(arr):  ##helper function for sort
 			k += 1
 	pass
 
+def shuffle(arr):
+	for i in reversed(range(1, len(arr))):
+		j = randrange(i + 1)
+		temp = arr[i]
+		arr[i] = arr[j]
+		arr[j] = temp
+	pass
+
+"""
+A class implementing the ADT list, using an AVL tree.
+"""
+
 class AVLTreeList(object):
-	import numpy as np
 
 	"""
 	Constructor, you are allowed to add more fields.
@@ -186,7 +193,7 @@ class AVLTreeList(object):
 	@returns: True if the list is empty, False otherwise
 	"""
 	def empty(self):
-		return self.len == 0
+		return (self.len == 0)
 
 
 	"""retrieves the value of the i'th item in the list
@@ -397,8 +404,7 @@ class AVLTreeList(object):
 	@returns: the size of the list
 	"""
 	def length(self): #time complexity O(1) ***check this***
-		return self.empty()
-
+		return self.len
 	"""sort the info values of the list
 
 	@rtype: list
@@ -406,7 +412,7 @@ class AVLTreeList(object):
 	"""
 	def sort(self):
 		if self.empty():
-			return self
+			return None
 		T1= AVLTreeList() ## make a copy of the self tree
 		arr = self.listToArray() ##store sorter list of elements
 		mergeSort(arr)
@@ -420,7 +426,14 @@ class AVLTreeList(object):
 	@returns: an AVLTreeList where the values are permuted randomly by the info of the original list. ##Use Randomness
 	"""
 	def permutation(self):
-		return None
+		if self.empty():
+			return None
+		T1 = AVLTreeList()
+		arr = self.listToArray()
+		shuffle(arr)
+		for i in range(len(arr)):
+			T1.insert(T1, i, arr[i])
+		return T1
 
 	"""concatenates lst to self
 
@@ -430,7 +443,45 @@ class AVLTreeList(object):
 	@returns: the absolute value of the difference between the height of the AVL trees joined
 	"""
 	def concat(self, lst):
-		return None
+		if len(lst)==0:
+			return 0
+		selfTreeHeight = self.getTreeHeight()
+		T2 = AVLTreeList(lst)
+		T2TreeHeight= T2.getTreeHeight()
+		if selfTreeHeight< T2TreeHeight:
+			rightMostNode= self.getMaxNode()
+			self.delete(self, rightMostNode)
+			for i in range(len(lst)):
+				nodeToJoin= AVLNode(lst[i])
+				h=node.getHeight(T2)
+				if h<= selfTreeHeight:
+					break
+			rootSelf= self.getRoot()
+			rootSelf= AVLNode(rootSelf)
+			rootSelf.setParent(self, rightMostNode)
+			nodeTojoin=AVLNode(nodeToJoin)
+			nodeTojoin.setParent(T2,rightMostNode )
+			self.updateHeight(self, rightMostNode)
+
+		else: #selfTreeHeight>T2TreeHeight: ##the opposite is a symmetric problem
+			rightMostNode = T2.getMaxNode()
+			T2.delete(T2, rightMostNode)
+			for i in range(len(self.len)):
+				nodeToJoin = AVLNode(self.retrieve(i))
+				h = node.getHeight(self)
+				if h <= T2TreeHeight:
+					break
+			rootT2 = T2.getRoot()
+			rootSelf = AVLNode(rootSelf)
+			rootSelf.setParent(self, rightMostNode)
+			nodeTojoin = AVLNode(nodeToJoin)
+			nodeTojoin.setParent(T2, rightMostNode)
+			self.updateHeight(self, rightMostNode)
+		selfTreeHeightAfter = self.getTreeHeight()
+		return abs(selfTreeHeight - selfTreeHeightAfter)
+
+
+
 
 	"""searches for a *value* in the list
 
@@ -440,7 +491,10 @@ class AVLTreeList(object):
 	@returns: the first index that contains val, -1 if not found.
 	"""
 	def search(self, val):
-		return None
+		for i in range (self.len):
+			if self.retrieve(self, i) == val:
+				return i
+		return -1
 
 
 
@@ -663,6 +717,13 @@ class AVLTreeList(object):
 				curr = curr.getRight()
 			return curr
 		return maxNodeRec(self.root)
+	def getMinNode(self):
+		def mindNodeRec(node):
+			curr = node
+			while curr.getLeft().isRealNode():
+				curr = curr.getLeft()
+			return curr
+		return maxNodeRec(self.root)
 
 	def inorderPrint(self):
 		def inorderPrintRec(node):
@@ -674,13 +735,6 @@ class AVLTreeList(object):
 				inorderPrintRec(node.getRight())
 		inorderPrintRec(self.root)
 		print("tree size " + str(self.len))
-
-
-
-
-
-
-
 # """ from here, all functions are for testing - REMOVE"""
 
 	def getTreeHeight(self):
