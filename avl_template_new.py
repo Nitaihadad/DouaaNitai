@@ -1,10 +1,10 @@
-#username - douaasatel
+#username -
 #id1      - 206360521
 #name1    - Douaa Satel
-#id2      -
-#name2    - complete info  
+#id2      - 208784843
+#name2    - Nitai Hadad
 from random import randrange
-import math
+
 
 """A class represnting a node in an AVL tree"""
 
@@ -222,10 +222,6 @@ class AVLTreeList(object):
 			return retrieve_rec(self.root,i)
 
 
-
-
-
-
 	"""inserts val at position i in the list
 
 	@type i: int
@@ -388,7 +384,7 @@ class AVLTreeList(object):
 	@rtype: list
 	@returns: a list of strings representing the data structure
 	"""
-	def listToArray(self): ##time complexity: O(nlog n)
+	def listToArray(self): ##time complexity:
 		if self.empty():
 			return None
 		else:
@@ -419,7 +415,7 @@ class AVLTreeList(object):
 		mergeSort(arr)
 		newArr=[]
 		for i in range (len(arr)):
-			T1.insert(i, arr[i])
+			T1.insert(i, newArr[i])
 		return T1
 
 	"""permute the info values of the list 
@@ -446,45 +442,60 @@ class AVLTreeList(object):
 	"""
 	def concat(self, lst):
 		if len(lst)==0:
-			return 0
-		selfTreeHeight = self.getTreeHeight()
+			return self
 		T2 = AVLTreeList()
+		if self.length()==0:
+			for i in range(len(lst)):
+				self.insert(i, lst[i])
+				return self
+		if len(lst) == self.length():
+			T2Max=T2.getMaxNode()
+			selfMax= self.getMaxNode()
+			if T2Max>selfMax:
+				joiningNode= T2Max
+				T2.delete(joiningNode)
+				joiningNode.setLeft(self.getRoot())
+				joiningNode.setRight(T2.getRoot())
+				return self
+			else:
+				joiningNode = selfMax
+				self.delete(joiningNode)
+				joiningNode.setRight(self.getRoot())
+				joiningNode.setLeft(T2.getRoot())
+				return self
+		selfTreeHeight = self.getTreeHeight()
 		for i in range(len(lst)):
 			T2.insert(i, lst[i])
 		T2TreeHeight= T2.getTreeHeight()
 		if selfTreeHeight< T2TreeHeight:
 			rightMostNode= self.getMaxNode()
 			self.delete(rightMostNode)
-			nodeToJoin = AVLNode(lst[0])
+			firstVertexOnLeftSpineT2 = AVLNode(lst[0])
 			for i in range(len(lst)):
-				nodeToJoin= AVLNode(lst[i])
-				h=nodeToJoin.getHeight()
-				if h<= selfTreeHeight:
+				firstVertexOnLeftSpineT2= AVLNode(lst[i])
+				h=firstVertexOnLeftSpineT2.getHeight()
+				if h== selfTreeHeight or h == selfTreeHeight -1:
 					break
 			rootSelf= self.getRoot()
 			rootSelf= AVLNode(rootSelf)
-			rootSelf.setParent( rightMostNode.value())
-			nodeToJoin.setParent(rightMostNode.value() )
-			self.rebalance( rightMostNode)
+			rootSelf.setLeft(rightMostNode.value())
+			firstVertexOnLeftSpineT2.setRight(rightMostNode.value() )
+			self.rebalance(rightMostNode)
 		else: #selfTreeHeight>T2TreeHeight: ##the opposite is a symmetric problem
 			rightMostNode = T2.getMaxNode()
 			T2.delete(rightMostNode)
-			nodeToJoin = AVLNode(self.retrieve(0).value())
+			firstVertexOnLeftSpineSelf = AVLNode(self.retrieve(0))
 			for i in range(len(self.length())):
-				nodeToJoin = AVLNode(self.retrieve(i))
-				h = nodeToJoin.getHeight()
-				if h <= T2TreeHeight:
+				firstVertexOnLeftSpineSelf = AVLNode(self.retrieve(i))
+				h = firstVertexOnLeftSpineSelf.getHeight()
+				if h == T2TreeHeight or h == T2TreeHeight-1:
 					break
 			rootT2 = T2.getRoot()
-			rootSelf = AVLNode(self.getRoot())
-			rootSelf.setParent(rightMostNode)
-			nodeToJoin.setParent(rightMostNode)
+			firstVertexOnLeftSpineSelf.setRight(rightMostNode)
+			rootT2.setLeft(rightMostNode)
 			self.rebalance(rightMostNode)
 		selfTreeHeightAfter = self.getTreeHeight()
 		return abs(selfTreeHeight - selfTreeHeightAfter)
-
-
-
 
 	"""searches for a *value* in the list
 
@@ -493,9 +504,9 @@ class AVLTreeList(object):
 	@rtype: int
 	@returns: the first index that contains val, -1 if not found.
 	"""
-	def search(self, val):
-		for i in range (self.len):
-			if self.retrieve(i) == val:
+	def search(self, val): #O(nlogn)
+		for i in range (self.length()):
+			if self.retrieve(i).value() == val:
 				return i
 		return -1
 
