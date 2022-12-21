@@ -400,7 +400,7 @@ class AVLTreeList(object):
 		if self.getRoot() == None:
 			return 0
 		rootNode= self.getRoot()
-		sizeTree= rootNode.size()
+		sizeTree= rootNode.getSize()
 		return sizeTree
 	"""sort the info values of the list
 
@@ -441,14 +441,14 @@ class AVLTreeList(object):
 	@returns: the absolute value of the difference between the height of the AVL trees joined
 	"""
 	def concat(self, lst):
-		if len(lst)==0:
+		if lst.length()==0:
 			return self
 		T2 = AVLTreeList()
 		if self.length()==0:
-			for i in range(len(lst)):
-				self.insert(i, lst[i])
+			for i in range(lst.length()):
+				self.insert(i, lst.retrieve(i))
 				return self
-		if len(lst) == self.length():
+		if lst.length == self.length():
 			T2Max=T2.getMaxNode()
 			selfMax= self.getMaxNode()
 			if T2Max>selfMax:
@@ -464,14 +464,14 @@ class AVLTreeList(object):
 				joiningNode.setLeft(T2.getRoot())
 				return self
 		selfTreeHeight = self.getTreeHeight()
-		for i in range(len(lst)):
-			T2.insert(i, lst[i])
+		for i in range(lst.length()):
+			T2.insert(i, lst.retrieve(i))
 		T2TreeHeight= T2.getTreeHeight()
 		if selfTreeHeight< T2TreeHeight:
 			rightMostNode= self.getMaxNode()
 			self.delete(rightMostNode)
-			firstVertexOnLeftSpineT2 = AVLNode(lst[0])
-			for i in range(len(lst)):
+			firstVertexOnLeftSpineT2 = AVLNode(lst.retrieve(0))
+			for i in range(lst.length()):
 				firstVertexOnLeftSpineT2= AVLNode(lst[i])
 				h=firstVertexOnLeftSpineT2.getHeight()
 				if h== selfTreeHeight or h == selfTreeHeight -1:
@@ -753,78 +753,78 @@ class AVLTreeList(object):
 				inorderPrintRec(node.getRight())
 		inorderPrintRec(self.root)
 		print("tree size " + str(self.len))
-# """ from here, all functions are for testing - REMOVE"""
+# """ from here, all functions are for testing - REMOVE before submition"""
 
-# 	def getTreeHeight(self):
-# 		return self.root.getHeight()
-# 	def append(self, val):
-# 		self.insert(self.length(), val)
-#
-# 	def printt(self):
-# 		out = ""
-# 		for row in self.printree(self.root):  # need printree.py file
-# 			out = out + row + "\n"
-# 		print(out)
-#
-# 	def printree(self, t, bykey=True):
-# 		# for row in trepr(t, bykey):
-# 		#        print(row)
-# 		return self.trepr(t, False)
-#
-# 	def trepr(self, t, bykey=False):
-# 		if t == None:
-# 			return ["#"]
-#
-# 		thistr = str(t.key) if bykey else str(t.getValue())
-#
-# 		return self.conc(self.trepr(t.left, bykey), thistr, self.trepr(t.right, bykey))
-#
-# 	def conc(self, left, root, right):
-#
-# 		lwid = len(left[-1])
-# 		rwid = len(right[-1])
-# 		rootwid = len(root)
-#
-# 		result = [(lwid + 1) * " " + root + (rwid + 1) * " "]
-#
-# 		ls = self.leftspace(left[0])
-# 		rs = self.rightspace(right[0])
-# 		result.append(ls * " " + (lwid - ls) * "_" + "/" + rootwid *
-# 					  " " + "\\" + rs * "_" + (rwid - rs) * " ")
-#
-# 		for i in range(max(len(left), len(right))):
-# 			row = ""
-# 			if i < len(left):
-# 				row += left[i]
-# 			else:
-# 				row += lwid * " "
-#
-# 			row += (rootwid + 2) * " "
-#
-# 			if i < len(right):
-# 				row += right[i]
-# 			else:
-# 				row += rwid * " "
-#
-# 			result.append(row)
-#
-# 		return result
-#
-# 	def leftspace(self, row):
-# 		# row is the first row of a left node
-# 		# returns the index of where the second whitespace starts
-# 		i = len(row) - 1
-# 		while row[i] == " ":
-# 			i -= 1
-# 		return i + 1
-#
-# 	def rightspace(self, row):
-# 		# row is the first row of a right node
-# 		# returns the index of where the first whitespace ends
-# 		i = 0
-# 		while row[i] == " ":
-# 			i += 1
-# 		return i
+	def getTreeHeight(self):
+		return self.root.getHeight()
+	def append(self, val):
+		self.insert(self.length(), val)
+
+	def printt(self):
+		out = ""
+		for row in self.printree(self.root):  # need printree.py file
+			out = out + row + "\n"
+		print(out)
+
+	def printree(self, t, bykey=True):
+		# for row in trepr(t, bykey):
+		#        print(row)
+		return self.trepr(t, False)
+
+	def trepr(self, t, bykey=False):
+		if t == None:
+			return ["#"]
+
+		thistr = str(t.key) if bykey else str(t.getValue())
+
+		return self.conc(self.trepr(t.left, bykey), thistr, self.trepr(t.right, bykey))
+
+	def conc(self, left, root, right):
+
+		lwid = len(left[-1])
+		rwid = len(right[-1])
+		rootwid = len(root)
+
+		result = [(lwid + 1) * " " + root + (rwid + 1) * " "]
+
+		ls = self.leftspace(left[0])
+		rs = self.rightspace(right[0])
+		result.append(ls * " " + (lwid - ls) * "_" + "/" + rootwid *
+					  " " + "\\" + rs * "_" + (rwid - rs) * " ")
+
+		for i in range(max(len(left), len(right))):
+			row = ""
+			if i < len(left):
+				row += left[i]
+			else:
+				row += lwid * " "
+
+			row += (rootwid + 2) * " "
+
+			if i < len(right):
+				row += right[i]
+			else:
+				row += rwid * " "
+
+			result.append(row)
+
+		return result
+
+	def leftspace(self, row):
+		# row is the first row of a left node
+		# returns the index of where the second whitespace starts
+		i = len(row) - 1
+		while row[i] == " ":
+			i -= 1
+		return i + 1
+
+	def rightspace(self, row):
+		# row is the first row of a right node
+		# returns the index of where the first whitespace ends
+		i = 0
+		while row[i] == " ":
+			i += 1
+		return i
 #
 #
 # def test():
