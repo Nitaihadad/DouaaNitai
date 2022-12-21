@@ -108,7 +108,7 @@ class AVLNode(object):
 	@returns: False if self is a virtual node, True otherwise.
 	"""
 	def isRealNode(self):
-		return self.value != "VIRTUAL"
+		return self.getValue() != "VIRTUAL"
 
 
 	"""
@@ -202,7 +202,15 @@ class AVLTreeList(object):
 	@returns: the the value of the i'th item in the list
 	"""
 	def retrieve(self, i):
-		def retrieve_rec(node,i):
+		node = self.get(i)
+		if node == None:
+			return None
+		return self.get(i).getValue()
+
+
+	'''return the i'th node'''
+	def get(self,i):
+		def get_rec(node,i):
 			left_subtree_size = 0
 			if node.getLeft().isRealNode():
 				left_subtree_size = node.getLeft().getSize()
@@ -211,15 +219,16 @@ class AVLTreeList(object):
 			else:
 				if i<node.getLeft().getSize():
 					ind = i
-					return retrieve_rec(node.getLeft(), ind)
+					return get_rec(node.getLeft(), ind)
 				else:
 					ind = i-node.getLeft().getSize()-1
-					return retrieve_rec(node.getRight(),ind)
+					return get_rec(node.getRight(),ind)
 
-		if i > self.len:
+		if i >= self.len or i<0:
 			return None
 		else:
-			return retrieve_rec(self.root,i)
+			return get_rec(self.root,i)
+
 
 
 	"""inserts val at position i in the list
@@ -241,10 +250,13 @@ class AVLTreeList(object):
 			self.root = new_node
 			self.len=1
 		elif i == 0:
-			tmp = self.root
-			self.root = new_node
-			new_node.setRight(tmp)
-			tmp.setParent(new_node)
+			parent = self.getMaxNode()
+			parent.setLeft(new_node)
+			new_node.setParent(parent)
+			# tmp = self.root
+			# self.root = new_node
+			# new_node.setRight(tmp)
+			# tmp.setParent(new_node)
 			self.len += 1
 
 		elif self.len == i:
@@ -253,7 +265,7 @@ class AVLTreeList(object):
 			new_node.setParent(parent)
 			self.len += 1
 		else:
-			node = self.retrieve(i)
+			node = self.get(i)
 			if not (node.getLeft().isRealNode()):
 				# node.setRight(new_node)
 				# new_node.setParent(node)
@@ -283,6 +295,7 @@ class AVLTreeList(object):
 		return rotations_cnt
 
 
+
 	"""deletes the i'th item in the list
 
 	@type i: int
@@ -294,14 +307,13 @@ class AVLTreeList(object):
 	def delete(self, i):
 		if i >= self.length():
 			return
-		self.len -=1
-		node = self.retrieve(i)
+		node = self.get(i)
 		parent = node.getParent()
 		left = node.getLeft()
 		right = node.getRight()
 		rotations_cnt = 0
 		if left.isRealNode() and right.isRealNode():
-			pred = node.getPredecessor() 				#if node has right son, its predecessor is the max node in the left sub tree (no right sons)
+			pred = self.getPredecessor(node)			#if node has right son, its predecessor is the max node in the left sub tree (no right sons)
 			pred_left_child = pred.getLeft()
 			pred_parent = pred.getParent()
 
@@ -351,6 +363,7 @@ class AVLTreeList(object):
 				rotations_cnt = self.rebalance(parent)
 				self.updateSize(parent)
 
+		self.len -=1
 		return rotations_cnt
 
 	"""returns the value of the first item in the list
@@ -362,8 +375,7 @@ class AVLTreeList(object):
 		if self.len == 0:
 			return None
 		else:
-			node = self.retrieve(0)
-			return node.value()
+			return  self.retrieve(0)
 
 
 
@@ -377,8 +389,7 @@ class AVLTreeList(object):
 			return None
 		else:
 			idx= self.len - 1
-			node = self.retrieve(idx)
-			return node.value()
+			return self.retrieve(idx)
 	"""returns an array representing list 
 
 	@rtype: list
@@ -388,7 +399,7 @@ class AVLTreeList(object):
 		if self.empty():
 			return None
 		else:
-			listArr= ([(self.retrieve(i)).value() for i in range(self.length())]) #create an array and use retrieve to hold the values the list elements
+			listArr= ([self.retrieve(i) for i in range(self.length())]) #create an array and use retrieve to hold the values the list elements
 			return listArr
 
 	"""returns the size of the list 
@@ -483,9 +494,9 @@ class AVLTreeList(object):
 			self.rebalance(rightMostNode)
 		else: #selfTreeHeight>T2TreeHeight: ##the opposite is a symmetric problem
 			rightMostNode = T2.getMaxNode()
-			T2.delete(rightMostNode)
+			T2.delete(T2.length()-1)
 			firstVertexOnLeftSpineSelf = AVLNode(self.retrieve(0))
-			for i in range(len(self.length())):
+			for i in range(self.length()):
 				firstVertexOnLeftSpineSelf = AVLNode(self.retrieve(i))
 				h = firstVertexOnLeftSpineSelf.getHeight()
 				if h == T2TreeHeight or h == T2TreeHeight-1:
@@ -506,7 +517,7 @@ class AVLTreeList(object):
 	"""
 	def search(self, val): #O(nlogn)
 		for i in range (self.length()):
-			if self.retrieve(i).value() == val:
+			if self.retrieve(i)== val:
 				return i
 		return -1
 
