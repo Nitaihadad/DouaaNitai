@@ -250,13 +250,9 @@ class AVLTreeList(object):
 			self.root = new_node
 			self.len=1
 		elif i == 0:
-			parent = self.getMaxNode()
+			parent = self.getMinNode()
 			parent.setLeft(new_node)
 			new_node.setParent(parent)
-			# tmp = self.root
-			# self.root = new_node
-			# new_node.setRight(tmp)
-			# tmp.setParent(new_node)
 			self.len += 1
 
 		elif self.len == i:
@@ -271,6 +267,8 @@ class AVLTreeList(object):
 				# new_node.setParent(node)
 				node.setLeft(new_node)
 				new_node.setParent(node)
+				self.len += 1
+
 			else:
 				# sucessor = self.getSucessor(node)
 				# succ_curr_left = sucessor.getLeft()
@@ -288,6 +286,8 @@ class AVLTreeList(object):
 					predecessor_curr_right = predecessor.getRight()
 					predecessor.setRight(new_node)
 					new_node.setParent(predecessor)
+					self.len += 1
+
 
 		rotations_cnt = self.rebalance(low_node)
 		self.updateHeight(low_node)
@@ -305,30 +305,59 @@ class AVLTreeList(object):
 	@returns: the number of rebalancing operation due to AVL rebalancing
 	"""
 	def delete(self, i):
-		if i >= self.length():
-			return
+		if i >= self.length() or i<0:
+			return -1
 		node = self.get(i)
 		parent = node.getParent()
 		left = node.getLeft()
 		right = node.getRight()
+		direction = node.childDirection()
+
+		if direction == 'ROOT' and self.len == 1: #if the tree is has one node and we need to remove it, remove the root
+			self.root = None
+			self.len = 0
+			return 0
+
 		rotations_cnt = 0
 		if left.isRealNode() and right.isRealNode():
-			pred = self.getPredecessor(node)			#if node has right son, its predecessor is the max node in the left sub tree (no right sons)
-			pred_left_child = pred.getLeft()
-			pred_parent = pred.getParent()
+			succ = self.getSucessor(node)
+			succ_right_child = succ.getRight()
+			succ_parent = succ.getParent()
 
-			if pred_left_child.isRealNode():
-				pred_left_child.setParent(pred_parent)
-				pred_parent.setRight(pred_left_child)
-			pred.setLeft(node.getLeft())
-			pred.setRight(node.getRight())
-			pred.setParent(node.getParent())
-			rotations_cnt = self.rebalance(pred_parent)
 
-			self.updateSize(pred_left_child)
+			if succ != node.getRight():
+				succ_right_child.setParent(succ_parent) #romove succ from tree, succ don't have left child
+				succ_parent.setLeft(succ_right_child)
+				succ.setRight(node.getRight())
+				succ.getRight().setParent(succ)
+				node.setRight(None)
+
+
+			succ.setLeft(node.getLeft()) #replace succ with node
+			node.setLeft(None)
+			succ.getLeft().setParent(succ)
+
+			succ.setParent(parent)
+			if direction == 'LEFT':
+				parent.setLeft(succ)
+			elif direction == 'RIGHT':
+				parent.setRight(succ)
+			node.setParent(None)
+
+
+			if direction == 'ROOT':
+				self.root = succ
+
+			if succ != node.getRight():
+				rotations_cnt = self.rebalance(succ_parent)
+				self.updateSize(succ_parent)
+
+			else:
+				rotations_cnt = self.rebalance(succ)
+				self.updateSize(succ)
+
 
 		else:
-			direction = node.childDirection()
 			node_is_left_child = direction == 'LEFT'
 			node_child = self.VIRTUALNODE              #the deafult is virtual, will change if the node has one son and wouldn't if not
 
@@ -344,13 +373,17 @@ class AVLTreeList(object):
 					parent.setLeft(node_child)
 				else:
 					parent.setRight(node_child)
+
+
 				parent.setSize(parent.getSize()-1)
-				self.updateSize(node_child)
+				if node_child.isRealNode():
+					self.updateSize(node_child)
+				else:
+					self.updateSize(parent)
 
 			elif node_child.isRealNode():
 				self.root = node_child
 				self.updateSize(node_child)
-
 
 
 			if node_child.isRealNode():
@@ -364,6 +397,8 @@ class AVLTreeList(object):
 				self.updateSize(parent)
 
 		self.len -=1
+
+
 		return rotations_cnt
 
 	"""returns the value of the first item in the list
@@ -546,7 +581,9 @@ class AVLTreeList(object):
 
 
 		parent_node.setLeft(child_node.getRight())
-		parent_node.getLeft().getParent().setParent(parent_node)
+		# parent_node.getLeft().getParent().setParent(parent_node)
+		parent_node.getLeft().setParent(parent_node)
+
 
 		if is_parent_left_child:
 			grand_parent.setLeft(child_node)
@@ -635,7 +672,7 @@ class AVLTreeList(object):
 		curr = None
 		if node.getRight().isRealNode():
 			curr = node.getRight()
-			while curr.getLeft().isRealNode:
+			while curr.getLeft().isRealNode():
 				curr = curr.getLeft()
 			sucessor = curr
 		else:
@@ -655,6 +692,7 @@ class AVLTreeList(object):
 	@returns: None
 	"""
 	def updateHeight(self, lowest_node):
+		curr = lowest_node
 		curr = lowest_node
 		if curr == self.VIRTUALNODE:
 			curr = curr.getParent()
@@ -769,7 +807,7 @@ class AVLTreeList(object):
 	def getTreeHeight(self):
 		return self.root.getHeight()
 	def append(self, val):
-		self.insert(self.length(), val)
+		return self.insert(self.length(), val)
 
 	def printt(self):
 		out = ""
@@ -836,38 +874,7 @@ class AVLTreeList(object):
 		while row[i] == " ":
 			i += 1
 		return i
-#
-#
-# def test():
-# 	avl = AVLTreeList()
-# 	avl.insert(0,'0')
-# 	avl.insert(1, '1')
-#
-# 	avl.delete(0)
-# 	avl.inorderPrint()
 
-	# avl.insert(1,'2')
-
-	#
-	# avl.insert(0,'2')
-	# avl.insert(1,'3')
-	# avl.insert(0,'4')
-#
-# 	node = avl.retrieve(3).getValue()
-# 	print(node)
-# 	#
-# 	# avl.insert(1,'1')
-# 	# avl.insert(2,'2')
-# 	# n = avl.retrieve(2)
-# 	# avl.insert(2,'3')
-# 	# avl.insert(0,'4')
-# 	# avl.insert(1,'5')
-# 	avl.inorderPrint()
-# 	avl.delete(0)
-
-
-	# avl.inorderPrint()
-	#test()
 
 
 
