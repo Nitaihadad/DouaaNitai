@@ -111,7 +111,6 @@ def q2_at_start(file):
         file.writerow([i,arr_time,lst_time, tree_time])
     file.writerow("")
 
-
 def q2_at_end(file):
     a = []
     l = DoublyLinkedList()
@@ -141,8 +140,6 @@ def q2_at_end(file):
 
         file.writerow([i,arr_time,lst_time, tree_time])
     file.writerow("")
-
-
 
 def q2_at_random(file):
     a = []
@@ -176,9 +173,6 @@ def q2_at_random(file):
 
         file.writerow([i,arr_time,lst_time, tree_time])
     file.writerow("")
-
-
-
 
 def q2_all():
     o = open("output.csv", "w")
