@@ -67,6 +67,7 @@ class AVLNode(object):
 	@type node: AVLNode
 	@param node: a node
 	"""
+
 	def setLeft(self, node):
 		self.left = node
 
@@ -487,61 +488,50 @@ class AVLTreeList(object):
 	@returns: the absolute value of the difference between the height of the AVL trees joined
 	"""
 	def concat(self, lst):
-		if lst.length()==0:
-			return self
-		T2 = AVLTreeList()
-		if self.length()==0:
-			for i in range(lst.length()):
-				self.insert(i, lst.retrieve(i))
-				return self
-		if lst.length == self.length():
-			T2Max=T2.getMaxNode()
-			selfMax= self.getMaxNode()
-			if T2Max>selfMax:
-				joiningNode= T2Max
-				T2.delete(joiningNode)
-				joiningNode.setLeft(self.getRoot())
-				joiningNode.setRight(T2.getRoot())
-				return self
-			else:
-				joiningNode = selfMax
-				self.delete(joiningNode)
-				joiningNode.setRight(self.getRoot())
-				joiningNode.setLeft(T2.getRoot())
-				return self
-		selfTreeHeight = self.getTreeHeight()
-		for i in range(lst.length()):
-			T2.insert(i, lst.retrieve(i))
-		T2TreeHeight= T2.getTreeHeight()
-		if selfTreeHeight< T2TreeHeight:
-			rightMostNode= self.getMaxNode()
-			self.delete(rightMostNode)
-			firstVertexOnLeftSpineT2 = AVLNode(lst.retrieve(0))
-			for i in range(lst.length()):
-				firstVertexOnLeftSpineT2= AVLNode(lst[i])
-				h=firstVertexOnLeftSpineT2.getHeight()
-				if h== selfTreeHeight or h == selfTreeHeight -1:
+		if (not self.empty()):
+			selfHeight = self.getTreeHeight()
+		if(not lst.empty() ):
+			lstHeight = lst.getTreeHeight()
+		if lst.empty():
+			return 0
+
+		elif self.empty():
+			self = lst
+			return lst.length()
+
+		elif selfHeight>=lstHeight:
+			rightMostNode= (self.retrieve(self.length()-1))
+			list1= self.listToArray() #delete later
+			list2= lst.listToArray() #delete later
+			self.delete(lst.length() -1 )
+			curr = 0
+			h=self.getTreeHeight()
+			while lst.get(curr).getHeight() > h+1:
+				if curr==lst.length():
 					break
-			rootSelf= self.getRoot()
-			rootSelf= AVLNode(rootSelf)
-			rootSelf.setLeft(rightMostNode.value())
-			firstVertexOnLeftSpineT2.setRight(rightMostNode.value() )
-			self.rebalance(rightMostNode)
-		else: #selfTreeHeight>T2TreeHeight: ##the opposite is a symmetric problem
-			rightMostNode = T2.getMaxNode()
-			T2.delete(T2.length()-1)
-			firstVertexOnLeftSpineSelf = AVLNode(self.retrieve(0))
-			for i in range(self.length()):
-				firstVertexOnLeftSpineSelf = AVLNode(self.retrieve(i))
-				h = firstVertexOnLeftSpineSelf.getHeight()
-				if h == T2TreeHeight or h == T2TreeHeight-1:
-					break
-			rootT2 = T2.getRoot()
-			firstVertexOnLeftSpineSelf.setRight(rightMostNode)
-			rootT2.setLeft(rightMostNode)
-			self.rebalance(rightMostNode)
-		selfTreeHeightAfter = self.getTreeHeight()
-		return abs(selfTreeHeight - selfTreeHeightAfter)
+				curr+=1
+			b = lst.get(curr)
+			bParent=b.getParent()
+			rightMostNode2= AVLNode(rightMostNode)
+			self.append(rightMostNode2)
+			self.getRoot().setParent(rightMostNode2)
+			rightMostNode2.setRight(b)
+			rightMostNode2.setParent(bParent)
+			self.rebalance(self.length()-1)
+
+
+		#elif selfHeight > lstHeight:
+
+		return abs(selfHeight-self.getTreeHeight())
+
+
+
+
+
+
+
+
+
 
 	"""searches for a *value* in the list
 

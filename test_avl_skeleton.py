@@ -1126,6 +1126,7 @@ class testAVLList(unittest.TestCase):
             T2.append(i)
             L2.append(i)
         T1.concat(T2)
+
         L3 = L1+L2
         self.compare_with_list_by_in_order(T1, L3)
         self.compare_with_list_by_retrieve(T1, L3)
