@@ -57,13 +57,13 @@ def run_deletions():
 def insertions_by_n(n):
     string_lst = []
     for i in range(n):
-        str = str(i)
-        string_lst.append(str)
+        string = str(i)
+        string_lst.append(string)
     T = AVLTreeList()
     total = 0
     while len(string_lst)!=0:
         num = rd.randrange(len(string_lst))
-        output = AVLTreeList.insert(i, string_lst[num])
+        output = T.insert(i, string_lst[num])
         string_lst.remove(string_lst[num])
         total += output
     return output
@@ -92,11 +92,11 @@ def run_insertions_deletions_alternately():
         total=0
         n= 1500* (2**i)
         # insert n/2 items
-        total += insertions_by_n(n/2)
-        total+= deletions_by_n(n/4)
-        total+= insertions_by_n(n/2)
-        total += deletions_by_n(n/4)
-        total += insertions_by_n(n/2)
+        total += insertions_by_n(n//2)
+        total+= deletions_by_n(n//4)
+        total+= insertions_by_n(n//2)
+        total += deletions_by_n(n//4)
+        total += insertions_by_n(n//2)
         lst_res.append(total)
     return lst_res
 
