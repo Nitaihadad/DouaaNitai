@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="231b9e3b-2094-4cff-b9e8-34f038e07e81" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/q1.py" beforeDir="false" afterPath="$PROJECT_DIR$/q1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/avl_template_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/avl_template_new.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +42,7 @@
     &quot;settings.editor.selected.configurable&quot;: &quot;debugger.dataViews.python.type.renderers&quot;
   }
 }</component>
-  <component name="RunManager" selected="Python.q1">
+  <component name="RunManager" selected="Python tests.Python tests for test_avl_skeleton.testAVLList">
     <configuration name="q1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="DouaaNitai" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -122,8 +122,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.q1" />
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList" />
+        <item itemvalue="Python.q1" />
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_assert_height_difference_non_empty_lists" />
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_compare_concatinated_treelists_and_list_small" />
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_concat_last" />

@@ -517,7 +517,8 @@ class AVLTreeList(object):
 			self.getRoot().setParent(rightMostNode2)
 			rightMostNode2.setRight(b)
 			rightMostNode2.setParent(bParent)
-			self.rebalance(self.length()-1)
+			if bParent.isRealNode():
+				self.rebalance(rightMostNode2)
 
 
 		#elif selfHeight > lstHeight:
