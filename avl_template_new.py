@@ -875,19 +875,7 @@ class AVLTreeList(object):
 			i += 1
 		return i
 
-def per_test():
-	t = AVLTreeList()
-	for i in range(100):
-		t.insert(i,i)
-	l1 = t.listToArray()
-	print(l1)
-	l = t.permutation()
-	print(l.listToArray())
-	l.sort()
-	print(l.listToArray())
 
-
-per_test()
 
 
 
