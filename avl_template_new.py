@@ -321,7 +321,7 @@ class AVLTreeList(object):
 
 		rotations_cnt = 0
 		if left.isRealNode() and right.isRealNode():
-			succ = self.getSucessor(node)
+			succ = self.getSuccessor(node)
 			succ_right_child = succ.getRight()
 			succ_parent = succ.getParent()
 
@@ -645,8 +645,8 @@ class AVLTreeList(object):
 			curr = node
 			while curr.getParent() != None:
 				curr_direction = curr.childDirection()
-				if curr_direction == "LEFT":
-					predecessor = node.getParent()
+				if curr_direction == "RIGHT":
+					predecessor = curr.getParent()
 					break
 				else:
 					curr = curr.getParent()
@@ -657,24 +657,24 @@ class AVLTreeList(object):
 	@rtype: AVLNode
 	@returns: if index(node) = i, return the node in index i-1
 	"""
-	def getSucessor(self,node):
-		sucessor = None
+	def getSuccessor(self, node):
+		successor = None
 		curr = None
 		if node.getRight().isRealNode():
 			curr = node.getRight()
 			while curr.getLeft().isRealNode():
 				curr = curr.getLeft()
-			sucessor = curr
+			successor = curr
 		else:
 			curr = node
 			while curr.getParent() != None:
 				curr_direction = curr.childDirection()
-				if curr_direction == "RIGHT":
-					sucessor = node.getParent()
+				if curr_direction == "LEFT":
+					successor = curr.getParent()
 					break
 				else:
 					curr = curr.getParent()
-		return sucessor
+		return successor
 
 	"""
 	traverse the tree bottom-up, and update the height of each subtree, all the way to the root
@@ -865,6 +865,19 @@ class AVLTreeList(object):
 			i += 1
 		return i
 
+def per_test():
+	t = AVLTreeList()
+	for i in range(100):
+		t.insert(i,i)
+	l1 = t.listToArray()
+	print(l1)
+	l = t.permutation()
+	print(l.listToArray())
+	l.sort()
+	print(l.listToArray())
+
+
+per_test()
 
 
 
