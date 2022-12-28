@@ -108,7 +108,7 @@ class AVLNode(object):
 	@returns: False if self is a virtual node, True otherwise.
 	"""
 	def isRealNode(self):
-		return self.getValue() != "VIRTUAL"
+		return self.getSize() != 0 and self.getHeight() != -1
 
 
 	"""
@@ -179,7 +179,7 @@ class AVLTreeList(object):
 	def __init__(self):
 		self.len = 0
 		self.root = None
-		self.VIRTUALNODE = AVLNode("VIRTUAL")
+		self.VIRTUALNODE = AVLNode(None)
 		self.VIRTUALNODE.setSize(0)
 
 
@@ -214,13 +214,13 @@ class AVLTreeList(object):
 			left_subtree_size = 0
 			if node.getLeft().isRealNode():
 				left_subtree_size = node.getLeft().getSize()
-			if i==left_subtree_size:
+			if i==left_subtree_size: #if the left subtree size is i, the current node is th i'th node
 				return node
 			else:
-				if i<node.getLeft().getSize():
+				if i<node.getLeft().getSize(): #if the left subtree size is greather then i, the i'th node is in the left sub tree of the current node, search by recursion
 					ind = i
 					return get_rec(node.getLeft(), ind)
-				else:
+				else: #if the left subtree size is less then i, the i'th node is in the right sub tree of the current node, search by recursion with updated i
 					ind = i-node.getLeft().getSize()-1
 					return get_rec(node.getRight(),ind)
 
@@ -246,30 +246,30 @@ class AVLTreeList(object):
 		low_node = new_node
 		new_node.setRight(self.VIRTUALNODE)
 		new_node.setLeft(self.VIRTUALNODE)
-		if self.len == 0 and i==0:
+		if self.len == 0 and i==0: #for the first node of the tree, make it the node
 			self.root = new_node
 			self.len=1
-		elif i == 0:
+		elif i == 0: #if i=0, the new node should be the left son of the current 0'th node, which is the min node
 			parent = self.getMinNode()
 			parent.setLeft(new_node)
 			new_node.setParent(parent)
 			self.len += 1
 
-		elif self.len == i:
+		elif self.len == i: #if i=len, the new node should be the right child of the current last node, which is the max node
 			parent = self.getMaxNode()
 			parent.setRight(new_node)
 			new_node.setParent(parent)
 			self.len += 1
 		else:
 			node = self.get(i)
-			if not (node.getLeft().isRealNode()):
+			if not (node.getLeft().isRealNode()): #if the current i'th node doesn't have a left child, make the new node its left child
 				# node.setRight(new_node)
 				# new_node.setParent(node)
 				node.setLeft(new_node)
 				new_node.setParent(node)
 				self.len += 1
 
-			else:
+			else: #if the current i'th node has a left child, make the new node its predecessor right child (for sure, it doesn't have a right child
 				# sucessor = self.getSucessor(node)
 				# succ_curr_left = sucessor.getLeft()
 				# sucessor.setLeft(new_node)
@@ -289,7 +289,7 @@ class AVLTreeList(object):
 					self.len += 1
 
 
-		rotations_cnt = self.rebalance(low_node)
+		rotations_cnt = self.rebalance(low_node) #rebalance the tree to keep it an avl, and update node fields
 		self.updateHeight(low_node)
 		self.updateSize(low_node)
 		return rotations_cnt
@@ -319,7 +319,7 @@ class AVLTreeList(object):
 			return 0
 
 		rotations_cnt = 0
-		if left.isRealNode() and right.isRealNode():
+		if left.isRealNode() and right.isRealNode(): #if the node both childs are real, need to find and remove the succ and replace the deleted node with it
 			succ = self.getSuccessor(node)
 			succ_right_child = succ.getRight()
 			succ_parent = succ.getParent()

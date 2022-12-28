@@ -881,7 +881,7 @@ class testAVLList(unittest.TestCase):
                 # T.printt()
                 n = T.retrieve((T.length() - 1) // 7)
                 c = T.get((T.length() - 1) // 7)
-                s = T.getSucessor(c)
+                s = T.getSuccessor(c)
                 T.delete((T.length() - 1) // 7)
                 # T.printt()
                 # T.printt()
