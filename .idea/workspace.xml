@@ -7,6 +7,8 @@
     <list default="true" id="231b9e3b-2094-4cff-b9e8-34f038e07e81" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/avl_template_new.py" beforeDir="false" afterPath="$PROJECT_DIR$/avl_template_new.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/q1.py" beforeDir="false" afterPath="$PROJECT_DIR$/q1.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test_avl_skeleton.py" beforeDir="false" afterPath="$PROJECT_DIR$/test_avl_skeleton.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -92,6 +94,20 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
+    <configuration name="Python tests for test_avl_skeleton.testAVLList.test_assert_height_difference_non_empty_lists_big" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
+      <module name="DouaaNitai" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;test_avl_skeleton.testAVLList.test_assert_height_difference_non_empty_lists_big&quot;" />
+      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="Python tests for test_avl_skeleton.testAVLList.test_compare_concatinated_treelists_and_list_small" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
       <module name="DouaaNitai" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -106,27 +122,13 @@
       <option name="_new_targetType" value="&quot;PYTHON&quot;" />
       <method v="2" />
     </configuration>
-    <configuration name="Python tests for test_avl_skeleton.testAVLList.test_concat_last" type="tests" factoryName="Autodetect" temporary="true" nameIsGenerated="true">
-      <module name="DouaaNitai" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="_new_additionalArguments" value="&quot;&quot;" />
-      <option name="_new_target" value="&quot;test_avl_skeleton.testAVLList.test_concat_last&quot;" />
-      <option name="_new_targetType" value="&quot;PYTHON&quot;" />
-      <method v="2" />
-    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList" />
         <item itemvalue="Python.q1" />
+        <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_assert_height_difference_non_empty_lists_big" />
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_assert_height_difference_non_empty_lists" />
         <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_compare_concatinated_treelists_and_list_small" />
-        <item itemvalue="Python tests.Python tests for test_avl_skeleton.testAVLList.test_concat_last" />
       </list>
     </recent_temporary>
   </component>
@@ -162,16 +164,6 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>1239</line>
-          <option name="timeStamp" value="9" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>1240</line>
-          <option name="timeStamp" value="10" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
           <line>1127</line>
           <option name="timeStamp" value="41" />
         </line-breakpoint>
@@ -182,35 +174,102 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>1249</line>
-          <option name="timeStamp" value="50" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
           <line>1213</line>
           <option name="timeStamp" value="56" />
         </line-breakpoint>
+        <line-breakpoint suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/venv/lib/python3.10/site-packages/openpyxl/workbook/child.py</url>
+          <line>89</line>
+          <option name="timeStamp" value="75" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>1222</line>
-          <option name="timeStamp" value="57" />
+          <url>file://$PROJECT_DIR$/q1.py</url>
+          <line>88</line>
+          <option name="timeStamp" value="88" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/q1.py</url>
+          <line>86</line>
+          <option name="timeStamp" value="97" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/q1.py</url>
+          <line>26</line>
+          <option name="timeStamp" value="102" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>1170</line>
-          <option name="timeStamp" value="58" />
+          <line>1172</line>
+          <option name="timeStamp" value="106" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>49</line>
-          <option name="timeStamp" value="59" />
+          <line>1173</line>
+          <option name="timeStamp" value="107" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
-          <line>51</line>
-          <option name="timeStamp" value="60" />
+          <line>1174</line>
+          <option name="timeStamp" value="108" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
+          <line>1175</line>
+          <option name="timeStamp" value="109" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
+          <line>1259</line>
+          <option name="timeStamp" value="111" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
+          <line>1257</line>
+          <option name="timeStamp" value="123" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
+          <line>1250</line>
+          <option name="timeStamp" value="126" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/test_avl_skeleton.py</url>
+          <line>1266</line>
+          <option name="timeStamp" value="128" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/q1.py</url>
+          <line>29</line>
+          <option name="timeStamp" value="131" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/avl_template_new.py</url>
+          <line>504</line>
+          <option name="timeStamp" value="135" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/avl_template_new.py</url>
+          <line>515</line>
+          <option name="timeStamp" value="136" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/avl_template_new.py</url>
+          <line>544</line>
+          <option name="timeStamp" value="137" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/avl_template_new.py</url>
+          <line>576</line>
+          <option name="timeStamp" value="138" />
         </line-breakpoint>
       </breakpoints>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
     </breakpoint-manager>
   </component>
 </project>

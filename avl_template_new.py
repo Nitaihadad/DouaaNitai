@@ -435,7 +435,7 @@ class AVLTreeList(object):
 		if self.empty():
 			return None
 		else:
-			listArr= ([self.retrieve(i) for i in range(self.length())]) #create an array and use retrieve to hold the values the list elements
+			listArr = [self.retrieve(i) for i in range(self.length())] #create an array and use retrieve to hold the values the list elements
 			return listArr
 
 	"""returns the size of the list 
@@ -488,51 +488,116 @@ class AVLTreeList(object):
 	@returns: the absolute value of the difference between the height of the AVL trees joined
 	"""
 	def concat(self, lst):
-		if (not self.empty()):
-			selfHeight = self.getTreeHeight()
-		if(not lst.empty() ):
-			lstHeight = lst.getTreeHeight()
-		if lst.empty():
+		if (self.empty() and lst.empty()): #both trees are empty
 			return 0
-
-		elif self.empty():
-			self = lst
-			return lst.length()
-
-		elif selfHeight>=lstHeight:
-			rightMostNode= (self.retrieve(self.length()-1))
-			list1= self.listToArray() #delete later
-			list2= lst.listToArray() #delete later
-			self.delete(lst.length() -1 )
-			curr = 0
-			h=self.getTreeHeight()
-			while lst.get(curr).getHeight() > h+1:
-				if curr==lst.length():
-					break
-				curr+=1
-			b = lst.get(curr)
-			bParent=b.getParent()
-			rightMostNode2= AVLNode(rightMostNode)
-			self.append(rightMostNode2)
-			self.getRoot().setParent(rightMostNode2)
-			rightMostNode2.setRight(b)
-			rightMostNode2.setParent(bParent)
-			if bParent.isRealNode():
-				self.rebalance(rightMostNode2)
-
-
-		#elif selfHeight > lstHeight:
+		elif (self.empty()):
+			self.setRoot(lst.getRoot())
+			return abs(self.getTreeHeight() - (-1))
+		elif (lst.empty()):
+			return abs(self.getTreeHeight() - (-1))
+		lstHeight = lst.getTreeHeight()  # initialize lst height
+		selfHeight = self.getTreeHeight()  # initialize tree height for self
+		#if neither of the trees are empty:
+		if selfHeight < lstHeight and self.length() == 1: ##if self is simple one node then insert into lst
+			curr = lst.get(0)
+			curr.setLeft(self.getRoot())
+			self.getRoot().setParent(curr)
+			self.setRoot(lst.getRoot())
+			self.updateSize(curr)
+			self.updateHeight(curr)
+			self.rebalance(curr)
+			return abs(selfHeight - self.getTreeHeight())
+		elif selfHeight > lstHeight and lst.length() == 1: #if we just need to insert one node from lst
+			curr = self.get(self.length()-1)
+			curr.setRight(lst.getRoot())
+			lst.getRoot().setParent(curr)
+			self.updateSize(curr)
+			self.updateHeight(curr)
+			self.rebalance(curr)
+			return abs(selfHeight-self.getTreeHeight())
+		elif selfHeight > lstHeight:
+			rightMostNode = (self.get(lst.length()-1))
+			lowestNode = rightMostNode.getParent()
+			self.delete(self.length()-1)
+			curr = self.getRoot()
+			h = lst.getTreeHeight()
+			while curr.getHeight() >= h+1:
+				curr = curr.getRight()
+			b = curr
+			c = b.getParent()
+			rightMostNode.setParent(c)
+			rightMostNode.setRight(lst.getRoot())
+			rightMostNode.setLeft(b)
+			b.setParent(rightMostNode)
+			lst.getRoot().setParent(rightMostNode)
+			if c != None:
+				c.setRight(rightMostNode)
+			else:
+				self.getRoot().setParent(rightMostNode)
+				self.setRoot(rightMostNode)
+			if lowestNode != None:
+				self.updateHeight(lowestNode)
+				self.updateSize(lowestNode)
+				self.rebalance(lowestNode)
+			else:
+				self.updateHeight(rightMostNode)
+				self.updateSize(rightMostNode)
+				self.rebalance(rightMostNode)
+			return abs(selfHeight - self.getTreeHeight())
+		elif selfHeight < lstHeight:
+			LeftMostNode = (lst.get(0))
+			lowestNode= LeftMostNode.getParent()
+			lst.delete(0)
+			curr = lst.getRoot()
+			h = self.getTreeHeight()
+			while curr.getHeight() >= h + 1:
+				curr = curr.getLeft()
+			b = curr
+			c = b.getParent()
+			LeftMostNode.setParent(c)
+			LeftMostNode.setLeft(self.getRoot())
+			LeftMostNode.setRight(b)
+			b.setParent(LeftMostNode)
+			self.getRoot().setParent(LeftMostNode)
+			if c != None:
+				c.setLeft(LeftMostNode)
+				self.getRoot().setParent(lst.getRoot())
+				self.setRoot(lst.getRoot())
+			else:
+				self.getRoot().setParent(LeftMostNode)
+				self.setRoot(LeftMostNode)
+			if lowestNode!= None:
+				self.updateHeight(lowestNode)
+				self.updateSize(lowestNode)
+				self.rebalance(lowestNode)
+			else:
+				self.updateHeight(LeftMostNode)
+				self.updateSize(LeftMostNode)
+				self.rebalance(LeftMostNode)
+			return abs(selfHeight - self.getTreeHeight())
+		elif selfHeight==lstHeight and selfHeight==1:
+			lst.getRoot().setParent(self.getRoot())
+			self.getRoot().setRight(lst.getRoot())
+			self.updateHeight(self.getRoot())
+			self.updateSize(self.getRoot())
+			return 0
+		else: #selfheight==lstheight
+			rightMostNode = (self.get(self.length() - 1))
+			lowestNode= rightMostNode.getParent()
+			if lowestNode == None:
+				lowestNode= rightMostNode
+			self.delete(self.length() - 1)
+			b = lst.getRoot()
+			rightMostNode.setLeft(self.getRoot())
+			rightMostNode.setRight(b)
+			self.getRoot().setParent(rightMostNode)
+			b.setParent(rightMostNode)
+			self.setRoot(rightMostNode)
+			self.updateHeight(lowestNode)
+			self.updateSize(lowestNode)
+			self.rebalance(lowestNode)
 
 		return abs(selfHeight-self.getTreeHeight())
-
-
-
-
-
-
-
-
-
 
 	"""searches for a *value* in the list
 
@@ -556,7 +621,8 @@ class AVLTreeList(object):
 	"""
 	def getRoot(self):
 		return self.root
-
+	def setRoot(self, node):
+		self.root = node
 
 	"""
 	rotate right the edge between child node and parent node, and update heights

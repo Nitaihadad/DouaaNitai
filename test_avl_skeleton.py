@@ -1247,6 +1247,7 @@ class testAVLList(unittest.TestCase):
             T1.append(i)
         for i in range(1):
             T2.append(i)
+
         self.assertEqual(T1.concat(T2), 1)
         T3 = AVLTreeList()
         T4 = AVLTreeList()
@@ -1275,39 +1276,39 @@ class testAVLList(unittest.TestCase):
                              T4.getRoot().getHeight()), T3.concat(T4))
 
     ### TESTING SPLIT ###
-    def check_root(self, tree):
-        if not tree.empty():
-            self.assertIsNone(tree.getRoot().getParent())
+    #def check_root(self, tree):
+        #if not tree.empty():
+         #   self.assertIsNone(tree.getRoot().getParent())
 
-    def check_split(self, lst, res, i):
-        self.assertEqual(lst[i], res[1])
-        L1 = lst[:i]
-        L2 = lst[i+1:]
-
-        ##checks values##
-        self.assertEqual(res[0].listToArray(), L1)
-        self.compare_with_list_by_retrieve(res[0], L1)
-        self.compare_with_list_by_in_order(res[0], L1)
-        self.assertEqual(res[2].listToArray(), L2)
-        self.compare_with_list_by_retrieve(res[2], L2)
-        self.compare_with_list_by_in_order(res[2], L2)
-
-        ##checks fields##
-        self.check_first(res[0], L1)
-        self.check_last(res[0], L1)
-        self.in_order(res[0], res[0].getRoot(), self.check_family)
-        self.in_order(res[0], res[0].getRoot(), self.check_height)
-        self.in_order(res[0], res[0].getRoot(), self.check_size)
-        self.in_order(res[0], res[0].getRoot(), self.check_BF)
-        self.check_root(res[0])
-
-        self.check_first(res[2], L2)
-        self.check_last(res[2], L2)
-        self.in_order(res[2], res[2].getRoot(), self.check_family)
-        self.in_order(res[2], res[2].getRoot(), self.check_height)
-        self.in_order(res[2], res[2].getRoot(), self.check_size)
-        self.in_order(res[2], res[2].getRoot(), self.check_BF)
-        self.check_root(res[2])
+    #def check_split(self, lst, res, i):
+        # self.assertEqual(lst[i], res[1])
+        # L1 = lst[:i]
+        # L2 = lst[i+1:]
+        #
+        # ##checks values##
+        # self.assertEqual(res[0].listToArray(), L1)
+        # self.compare_with_list_by_retrieve(res[0], L1)
+        # self.compare_with_list_by_in_order(res[0], L1)
+        # self.assertEqual(res[2].listToArray(), L2)
+        # self.compare_with_list_by_retrieve(res[2], L2)
+        # self.compare_with_list_by_in_order(res[2], L2)
+        #
+        # ##checks fields##
+        # self.check_first(res[0], L1)
+        # self.check_last(res[0], L1)
+        # self.in_order(res[0], res[0].getRoot(), self.check_family)
+        # self.in_order(res[0], res[0].getRoot(), self.check_height)
+        # self.in_order(res[0], res[0].getRoot(), self.check_size)
+        # self.in_order(res[0], res[0].getRoot(), self.check_BF)
+        # self.check_root(res[0])
+        #
+        # self.check_first(res[2], L2)
+        # self.check_last(res[2], L2)
+        # self.in_order(res[2], res[2].getRoot(), self.check_family)
+        # self.in_order(res[2], res[2].getRoot(), self.check_height)
+        # self.in_order(res[2], res[2].getRoot(), self.check_size)
+        # self.in_order(res[2], res[2].getRoot(), self.check_BF)
+        # self.check_root(res[2])
 
     # def test_split_basic(self):
     #     L = []
