@@ -130,6 +130,8 @@ class AVLNode(object):
 		self.size = s
 
 
+
+
 ##Helper functions used in AVLTreeList
 
 def mergeSort(arr):  ##helper function for sort
@@ -206,7 +208,7 @@ class AVLTreeList(object):
 		node = self.get(i)
 		if node == None:
 			return None
-		return self.get(i).getValue()
+		return node.getValue()
 
 
 	'''return the i'th node'''
@@ -225,10 +227,13 @@ class AVLTreeList(object):
 					ind = i-node.getLeft().getSize()-1
 					return get_rec(node.getRight(),ind)
 
-		if i >= self.len or i<0:
+		if i >= self.length() or i<0:
 			return None
 		else:
 			return get_rec(self.root,i)
+
+	def setRoot(self,node):
+		self.root = node
 
 
 
@@ -421,10 +426,10 @@ class AVLTreeList(object):
 	@returns: the value of the last item, None if the list is empty
 	"""
 	def last(self):
-		if self.len == 0:
+		if self.length() == 0:
 			return None
 		else:
-			idx= self.len - 1
+			idx= self.length() - 1
 			return self.retrieve(idx)
 	"""returns an array representing list 
 
@@ -487,51 +492,128 @@ class AVLTreeList(object):
 	@rtype: int
 	@returns: the absolute value of the difference between the height of the AVL trees joined
 	"""
+
 	def concat(self, lst):
-		if (not self.empty()):
-			selfHeight = self.getTreeHeight()
-		if(not lst.empty() ):
-			lstHeight = lst.getTreeHeight()
-		if lst.empty():
+		if (self.empty() and lst.empty()):  # both trees are empty
 			return 0
+		elif (self.empty()):
+			self.setRoot(lst.getRoot())
+			self.len = lst.length()
+			return abs(self.getTreeHeight() - (-1))
+		elif (lst.empty()):
+			return abs(self.getTreeHeight() - (-1))
+		lstHeight = lst.getTreeHeight()  # initialize lst height
+		selfHeight = self.getTreeHeight()  # initialize tree height for self
+		# if neither of the trees are empty:
+		slf1 = self.length()
+		lst1 = lst.length()
+		self.len = self.length() + lst.length()
+		if selfHeight < lstHeight and self.length() == 1:  ##if self is simple one node then insert into lst
+			curr = lst.get(0)
+			curr.setLeft(self.getRoot())
+			self.getRoot().setParent(curr)
+			self.setRoot(lst.getRoot())
+			self.updateSize(curr)
+			self.updateHeight(curr)
+			self.rebalance(curr)
+			return abs(selfHeight - lstHeight)
+		elif selfHeight > lstHeight and lst.length() == 1:  # if we just need to insert one node from lst
+			curr = self.get(self.length() - 1)
+			curr.setRight(lst.getRoot())
+			lst.getRoot().setParent(curr)
+			self.updateSize(curr)
+			self.updateHeight(curr)
+			self.rebalance(curr)
+			return abs(selfHeight - lstHeight)
+		elif selfHeight > lstHeight:
+			rightMostNode = (self.get(self.length() - 1))
+			lowestNode = rightMostNode.getParent()
+			self.delete(self.length() - 1)
+			self.len += 1     #node will be add manually and not by insert, need to keep the len field updated
+			curr = self.getRoot()
+			h = lst.getTreeHeight()
+			while curr.getHeight() >= h + 1:
+				curr = curr.getRight()
+			b = curr
+			c = b.getParent()
+			rightMostNode.setParent(c)
+			rightMostNode.setRight(lst.getRoot())
+			lst.getRoot().setParent(rightMostNode)
+			rightMostNode.setLeft(b)
+			b.setParent(rightMostNode)
 
-		elif self.empty():
-			self = lst
-			return lst.length()
+			if c != None:
+				c.setRight(rightMostNode)
+			else:
+				self.getRoot().setParent(rightMostNode)
+				self.setRoot(rightMostNode)
+				rightMostNode.setParent(None)
+			if lowestNode != None:
+				self.updateHeight(lowestNode)
+				self.updateSize(lowestNode)
+				self.rebalance(lowestNode)
+			else:
+				self.updateHeight(rightMostNode)
+				self.updateSize(rightMostNode)
+				self.rebalance(rightMostNode)
+			return abs(selfHeight - lstHeight)
+		elif selfHeight < lstHeight:
+			LeftMostNode = (lst.get(0))
+			lowestNode = LeftMostNode.getParent()
+			lst.delete(0)
+			curr = lst.getRoot()
+			h = self.getTreeHeight()
+			while curr.getHeight() >= h + 1:
+				curr = curr.getLeft()
+			b = curr
+			c = b.getParent()
+			LeftMostNode.setParent(c)
+			LeftMostNode.setLeft(self.getRoot())
+			LeftMostNode.setRight(b)
+			b.setParent(LeftMostNode)
+			self.getRoot().setParent(LeftMostNode)
+			if c != None:
+				c.setLeft(LeftMostNode)
+				self.getRoot().setParent(lst.getRoot())
+				self.setRoot(lst.getRoot())
+			else:
+				self.getRoot().setParent(LeftMostNode)
+				self.setRoot(LeftMostNode)
+				LeftMostNode.setParent(None)
+			if lowestNode != None:
+				self.updateHeight(lowestNode)
+				self.updateSize(lowestNode)
+				self.rebalance(lowestNode)
+			else:
+				self.updateHeight(LeftMostNode)
+				self.updateSize(LeftMostNode)
+				self.rebalance(LeftMostNode)
+			return abs(selfHeight - lstHeight)
+		elif selfHeight == lstHeight and selfHeight == 1:
+			lst.getRoot().setParent(self.getRoot())
+			self.getRoot().setRight(lst.getRoot())
+			self.updateHeight(self.getRoot())
+			self.updateSize(self.getRoot())
+			return 0
+		else:  # selfheight==lstheight
+			rightMostNode = (self.get(self.length() - 1))
+			lowestNode = rightMostNode.getParent()
+			if lowestNode == None:
+				lowestNode = rightMostNode
+			self.delete(self.length() - 1)
+			self.len += 1
+			b = lst.getRoot()
+			rightMostNode.setLeft(self.getRoot())
+			rightMostNode.setRight(b)
+			self.getRoot().setParent(rightMostNode)
+			b.setParent(rightMostNode)
+			self.setRoot(rightMostNode)
+			rightMostNode.setParent(None)
+			self.updateHeight(lowestNode)
+			self.updateSize(lowestNode)
+			self.rebalance(lowestNode)
 
-		elif selfHeight>=lstHeight:
-			rightMostNode= (self.retrieve(self.length()-1))
-			list1= self.listToArray() #delete later
-			list2= lst.listToArray() #delete later
-			self.delete(lst.length() -1 )
-			curr = 0
-			h=self.getTreeHeight()
-			while lst.get(curr).getHeight() > h+1:
-				if curr==lst.length():
-					break
-				curr+=1
-			b = lst.get(curr)
-			bParent=b.getParent()
-			rightMostNode2= AVLNode(rightMostNode)
-			self.append(rightMostNode2)
-			self.getRoot().setParent(rightMostNode2)
-			rightMostNode2.setRight(b)
-			rightMostNode2.setParent(bParent)
-			self.rebalance(self.length()-1)
-
-
-		#elif selfHeight > lstHeight:
-
-		return abs(selfHeight-self.getTreeHeight())
-
-
-
-
-
-
-
-
-
+		return abs(selfHeight - lstHeight)
 
 	"""searches for a *value* in the list
 
@@ -703,6 +785,7 @@ class AVLTreeList(object):
 			curr.size = 1 + curr.getLeft().getSize() + curr.getRight().getSize()
 			curr = curr.getParent()
 
+
 	""" 
 	@rtype: AVLTree
 	@returns: int, the height diff between node left subtree and node right subtree
@@ -864,13 +947,5 @@ class AVLTreeList(object):
 		while row[i] == " ":
 			i += 1
 		return i
-
-
-
-
-
-
-
-
 
 
