@@ -1,6 +1,3 @@
-import random2
-
-from avl_template_new import AVLNode
 from avl_template_new import AVLTreeList
 import pandas as pd
 import random as rd
@@ -13,12 +10,12 @@ def run_insertions():
     res = []
     trees = []
     for i in range(1, 11):
-        print("current index= " + str(i))
+
         T = AVLTreeList()  # create a tree object
         total = 0
         curr = 0
         for j in reversed(range(1, 1500 * (2 ** i))):
-            num = rd.randrange(0,j)
+            num = rd.randrange(0, j)
             output = T.insert(curr, num)
             total += output
             curr += 1
@@ -32,8 +29,8 @@ def run_deletions(tree_lst):
     for i in range(len(tree_lst)):
         total = 0
         T = tree_lst[i]
-        max = T.length()
-        for j in reversed(range(1, max)):
+        maximum = T.length()
+        for j in reversed(range(1, maximum)):
             num = rd.randint(1, j)
             output = T.delete(num)
             total += output
@@ -41,29 +38,28 @@ def run_deletions(tree_lst):
     return res
 
 
-def insert_by_n(T, n):
+def insert_by_n(tree, n):
     total = 0
     curr = 0
     for i in reversed(range(0, n)):
         num = rd.randint(1, int(n))
-        output = T.insert(curr, num)
+        output = tree.insert(curr, num)
         total += output
         curr += 1
-    return [total, T]
+    return [total, tree]
 
 
-def delete_by_n(T, n):
+def delete_by_n(tree, n):
     total = 0
     for i in reversed(range(0, n)):
         num = rd.randint(1, n)
-        output = T.delete(num)
+        output = tree.delete(num)
         total += output
 
-    return [total, T]
+    return [total, tree]
 
 
 def insert_delete(n):
-    curr = 0
     # insert n//2
     insert1 = insert_by_n(AVLTreeList(), int(n / 2))  # return list with curr, total, string list
     delete1 = delete_by_n(insert1[1], int(n / 4))  # return list with total and curr
@@ -84,27 +80,27 @@ def run_insertions_deletions_alternately():
 
 
 def create_excel_file(insertion_lst, deletion_lst, alternate_insertion_deletion_lst):
-    #d1 = {'Arrangement Number i': [i for i in range(1, 11)], 'Insertion Experiment': insertion_lst}
-    #d2 = {'Arrangement Number i': [i for i in range(1, 11)], 'Deletion Experiment': deletion_lst}
+    d1 = {'Arrangement Number i': [i for i in range(1, 11)], 'Insertion Experiment': insertion_lst}
+    d2 = {'Arrangement Number i': [i for i in range(1, 11)], 'Deletion Experiment': deletion_lst}
     d3 = {'Arrangement Number i': [i for i in range(1, 11)],
           'Insertion/Deletion Experiment': alternate_insertion_deletion_lst}
-    #df1 = pd.DataFrame(data=d1)
-    #df2 = pd.DataFrame(data=d2)
+    df1 = pd.DataFrame(data=d1)
+    df2 = pd.DataFrame(data=d2)
     df3 = pd.DataFrame(data=d3)
     with pd.ExcelWriter('Results2.xlsx') as writer:
-        #df1.to_excel(writer, sheet_name='Insertion Experiment')
-        #df2.to_excel(writer, sheet_name='Deletion Experiment')
+        df1.to_excel(writer, sheet_name='Insertion Experiment')
+        df2.to_excel(writer, sheet_name='Deletion Experiment')
         df3.to_excel(writer, sheet_name='Insertion_Deletion Experiment')
 
 
 def main():
-    #insertion_lst = run_insertions()
-    #print('done1')
-    #deletion_lst = run_deletions(insertion_lst[1])
-    #print('done2')
+    insertion_lst = run_insertions()
+
+    deletion_lst = run_deletions(insertion_lst[1])
+
     alternate_insertion_deletion_lst = run_insertions_deletions_alternately()
-    print('done3')
-    create_excel_file([], [], alternate_insertion_deletion_lst)
+
+    create_excel_file(insertion_lst, deletion_lst, alternate_insertion_deletion_lst)
     pass
 
 
