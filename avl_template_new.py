@@ -1,4 +1,4 @@
-#username -
+#username - douaasatel
 #id1      - 206360521
 #name1    - Douaa Satel
 #id2      - 208784843
@@ -465,9 +465,9 @@ class AVLTreeList(object):
 		T1= AVLTreeList() ## make a copy of the self tree
 		arr = self.listToArray() ##store sorter list of elements
 		mergeSort(arr)
-		newArr=[]
+		
 		for i in range (len(arr)):
-			T1.insert(i, newArr[i])
+			T1.insert(i, arr[i])
 		return T1
 
 	"""permute the info values of the list 
