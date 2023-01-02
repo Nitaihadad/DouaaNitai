@@ -858,6 +858,15 @@ class AVLTreeList(object):
 			return curr
 		return maxNodeRec(self.root)
 	
+	def getMinNode(self): #O(logn)
+		def mindNodeRec(node):
+			curr = node
+			while curr.getLeft().isRealNode():
+				curr = curr.getLeft()
+			return curr
+
+		return mindNodeRec(self.root)
+	
 	def getTreeHeight(self):
 		return self.root.getHeight()
 	
